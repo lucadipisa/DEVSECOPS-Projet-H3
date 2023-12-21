@@ -1,8 +1,8 @@
 body {
-    font-family: Arial, sans-serif;
+    font-family: Poppins;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
+    background-color: white;
   }
   
   .container {
@@ -33,27 +33,57 @@ body {
   }
   
   table {
-    width: 100%;
+    border-spacing: 1;
     border-collapse: collapse;
-    margin-top: 20px;
-  }
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    width: 1170px;
+    margin: 0 auto;
+    position: relative;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 50px;  }
   
   th, td {
     border: 1px solid #ddd;
     padding: 8px;
-    text-align: left;
   }
+
+  table thead tr {
+    height: 60px;
+    background: #36304a;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #f5f5f5;
+}
+
+table tbody tr {
+  height: 50px;
+}
+
+tbody tr:hover {
+  color: #555;
+  font-weight: 600;
+  background-color: #f5f5f5;
+  cursor: pointer;
+}
+
+tbody tr{
+  font-family: OpenSans-Regular;
+  font-size: 15px;
+  color: gray;
+  line-height: 1.2;
+  font-weight: unset;
+}
   
   th {
-    background-color: #f2f2f2;
+    border: 1px solid #ddd;
+    padding: 8px;
+    color: white;
+    font-weight: 400;
+
+
   }
-  
-  .pagination {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-  }
-  
   .page-link {
     margin: 0 5px;
     padding: 5px 10px;
@@ -67,4 +97,98 @@ body {
   .page-link:hover {
     background-color: #45a049;
   }
+
+  .pagination{
+    text-align: center;
+    margin-top: 20px;
+  }
   
+  .pagination button{
+    background-color: #fff;
+    border: 1px solid #d5d9d9;
+    border-radius: 8px;
+    box-shadow: rgba(213, 217, 217, .5) 0 2px 5px 0;
+    color: #0f1111;
+    cursor: pointer;
+    font-family: "Amazon Ember",sans-serif;
+    font-size: 13px;
+    line-height: 29px;
+    padding: 0 10px 0 11px;
+    width: 100px;
+  }
+  
+  #root button{
+    background-color: rgba(110, 51, 144, 0.5);
+    border: 1px solid #d5d9d9;
+    border-radius: 8px;
+    box-shadow: rgba(213, 217, 217, .5) 0 2px 5px 0;
+    color: white;
+    cursor: pointer;
+    font-family: "Amazon Ember",sans-serif;
+    font-size: 13px;
+    line-height: 29px;
+    font-weight: bold;
+    margin-top: 20px;
+    width: 135px;
+  }
+
+  #root button:hover{
+    background-color: rgba(110, 51, 144, 1);
+    border: 1px solid #d5d9d9;
+    border-radius: 8px;
+    box-shadow: rgba(213, 217, 217, .5) 0 2px 5px 0;
+    color: white;
+    cursor: pointer;
+    font-family: "Amazon Ember",sans-serif;
+    font-size: 13px;
+    line-height: 29px;
+    font-weight: bold;
+    margin-top: 20px;
+    width: 135px;
+  }
+
+  #root input{
+    background-color: #fff;
+    border: 1px solid #d5d9d9;
+    border-radius: 8px;
+    box-shadow: rgba(213, 217, 217, .5) 0 2px 5px 0;
+    color: #0f1111;
+    font-family: "Amazon Ember",sans-serif;
+    font-size: 13px;
+    line-height: 29px;
+    height: 30px;
+    padding: 0 10px 0 11px;
+  }
+
+/* Exemple de style CSS pour le composant ConstructionChart */
+.chart-container {
+  width: 50%;
+  height: 700px; /* Ajustez la largeur du conteneur selon vos besoins */
+  margin: 20px; /* Ajoutez une marge pour l'espace autour du graphique */
+  text-align: center;
+  margin-left: 400px;
+  display: inline-block;
+}
+
+#yearSelector {
+  padding: 8px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  cursor: pointer;
+  outline: none;
+}
+
+#yearSelector:hover {
+  border-color: #555;
+}
+
+#yearSelector:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.Stats{
+  text-align: center;
+}

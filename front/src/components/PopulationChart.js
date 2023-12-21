@@ -18,8 +18,8 @@ const PopulationChart = ({ labels, data }) => {
           {
             label: 'Nombre d\'habitants par région',
             data: data,
-            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-            borderColor: 'rgba(75, 192, 192, 1)',
+            backgroundColor: 'rgba(110, 51, 144, 0.5)',
+            borderColor: 'rgba(110, 51, 144, 0.5)',
             borderWidth: 1,
           },
         ],
@@ -35,8 +35,8 @@ const PopulationChart = ({ labels, data }) => {
   }, [labels, data]);
 
   return (
-    <div>
-      <h3>Nombre d'habitants / région</h3>
+<div className="chart-container">
+        <h3>Nombre d'habitants / région</h3>
       <canvas ref={canvasRefPopulation} width="400" height="200"></canvas>
     </div>
   );

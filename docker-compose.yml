@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  backend:
+    build:
+      context: ./back
+      dockerfile: Dockerfile.back
+    ports:
+      - "5000:5000"
+
+
+
+  frontend:
+    build:
+      context: ./front
+      dockerfile: Dockerfile.front
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+

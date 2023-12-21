@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import SearchBar from './components/SearchBar';
-import Chart from 'chart.js/auto';
 import PopulationChart from './components/PopulationChart';
 import UnemploymentChart from './components/UnemploymentChart';
 import ConstructionChart from './components/ConstructionChart';
@@ -10,13 +9,13 @@ import './styles.css';
 const App = () => {
   const [data, setData] = useState([]);
   const [searchParams, setSearchParams] = useState({
-    densiteMax: '', 
-    densiteMin: '', 
+    densiteMax: '',
+    densiteMin: '',
     region: '',
-    department: '', 
-    populationMax: '', 
-    populationMin: '', 
-    housingMax: '', 
+    department: '',
+    populationMax: '',
+    populationMin: '',
+    housingMax: '',
     housingMin: ''
     // Ajout d'autres filtres de recherche
   });
@@ -28,10 +27,15 @@ const App = () => {
   const [unemploymentStats, setUnemploymentStats] = useState([]);
   const [constructionStats, setConstructionStats] = useState([]);
 
+  // Nouvelle variable d'état pour gérer la visibilité du tableau
+  const [tableVisible, setTableVisible] = useState(false);
+
+  // Nouvelle variable d'état pour suivre l'onglet actif (graphique)
+  const [activeTab, setActiveTab] = useState('population');
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        
         // Filtrer des paramètres non vides
         const filteredParams = Object.fromEntries(
           Object.entries(searchParams).filter(([_, value]) => value !== '')
@@ -45,7 +49,8 @@ const App = () => {
           throw new Error(`Error fetching search data: ${response.statusText}`);
         }
 
-        const jsonData = typeof response.data === 'string' ? JSON.parse(response.data) : response.data;
+        const jsonData =
+          typeof response.data === 'string' ? JSON.parse(response.data) : response.data;
         setData(jsonData);
 
         // Mise à jour du nombre total d'éléments pour la pagination
@@ -54,13 +59,12 @@ const App = () => {
 
         // nbr habit / region
         await fetchPopulationStats();
-        
+
         // taux chômage / region
         await fetchUnemploymentStats();
-        
+
         // nombre construction / region
         await fetchConstructionStats();
-
       } catch (error) {
         console.error('Error fetching search data:', error.message);
 
@@ -101,7 +105,8 @@ const App = () => {
         throw new Error(`Error fetching search data: ${response.statusText}`);
       }
 
-      const jsonData = typeof response.data === 'string' ? JSON.parse(response.data) : response.data;
+      const jsonData =
+        typeof response.data === 'string' ? JSON.parse(response.data) : response.data;
       setData(jsonData);
 
       // Mise à jour du nombre total d'éléments pour la pagination
@@ -116,13 +121,15 @@ const App = () => {
     }
   };
 
-  const renderColumnsHeader = ['densite_de_population_au_km2', 'nom_region', 'nom_departement', 'nombre_d_habitants', 'nombre_de_logements'];
+  const renderColumnsHeader = [
+    'densite_de_population_au_km2',
+    'nom_region',
+    'nom_departement',
+    'nombre_d_habitants',
+    'nombre_de_logements'
+  ];
 
   const renderTableHeader = () => {
-    // if (data.length === 0) return null;
-
-    // const header = Object.keys(data[0]);
-    // return header.map((key, index) => <th key={index}>{key}</th>);
     return renderColumnsHeader.map((column, index) => <th key={index}>{column}</th>);
   };
 
@@ -145,21 +152,22 @@ const App = () => {
           year: selectedYear,
         },
       });
-  
+
       if (response.status !== 200) {
         throw new Error(`Error fetching population stats: ${response.statusText}`);
       }
-  
-      const jsonData = typeof response.data === 'string' ? JSON.parse(response.data) : response.data;
-  
+
+      const jsonData =
+        typeof response.data === 'string' ? JSON.parse(response.data) : response.data;
+
       // Créer le tableau de données pour Chart.js
       const labels = jsonData.map((entry) => entry.nom_region);
       const data = jsonData.map((entry) => entry.total_population);
-  
+
       setPopulationStats({ labels, data });
     } catch (error) {
       console.error('Error fetching population stats:', error.message);
-  
+
       if (error.response) {
         console.log('Server Response:', error.response.data);
       }
@@ -173,21 +181,22 @@ const App = () => {
           year: selectedYear,
         },
       });
-  
+
       if (response.status !== 200) {
         throw new Error(`Error fetching unemployment stats: ${response.statusText}`);
       }
-  
-      const jsonData = typeof response.data === 'string' ? JSON.parse(response.data) : response.data;
-  
+
+      const jsonData =
+        typeof response.data === 'string' ? JSON.parse(response.data) : response.data;
+
       // Créer le tableau de données pour Chart.js
       const labels = jsonData.map((entry) => entry.nom_region);
       const data = jsonData.map((entry) => entry.average_unemployment_rate);
-  
+
       setUnemploymentStats({ labels, data });
     } catch (error) {
       console.error('Error fetching unemployment stats:', error.message);
-  
+
       if (error.response) {
         console.log('Server Response:', error.response.data);
       }
@@ -201,43 +210,59 @@ const App = () => {
           year: selectedYear,
         },
       });
-  
+
       if (response.status !== 200) {
         throw new Error(`Error fetching construction stats: ${response.statusText}`);
       }
-  
-      const jsonData = typeof response.data === 'string' ? JSON.parse(response.data) : response.data;
-  
+
+      const jsonData =
+        typeof response.data === 'string' ? JSON.parse(response.data) : response.data;
+
       // Créer le tableau de données pour Chart.js
       const labels = jsonData.map((entry) => entry.nom_region);
       const data = jsonData.map((entry) => entry.average_construction_rate);
-  
+
       setConstructionStats({ labels, data });
     } catch (error) {
       console.error('Error fetching construction stats:', error.message);
-  
+
       if (error.response) {
         console.log('Server Response:', error.response.data);
       }
     }
   };
-  
 
   const handlePageChange = (newPage) => {
     setCurrentPage(newPage);
   };
 
+  // Fonction pour basculer la visibilité du tableau
+  const toggleTableVisibility = () => {
+    setTableVisible(!tableVisible);
+  };
+
+  // Fonction pour changer l'onglet actif
+  const changeActiveTab = (tab) => {
+    setActiveTab(tab);
+  };
+
   return (
     <div>
-      <h1>Application de logements et logements sociaux</h1>
-      <h2>Tableau d'information générale</h2>
+      <h2>Filtres</h2>
       <div>
         <SearchBar
           searchParams={searchParams}
           onSearchChange={handleSearchChange}
           onSearchSubmit={handleSearchSubmit}
         />
-        {data.length > 0 ? (
+
+        {/* Bouton pour basculer la visibilité du tableau */}
+        <button onClick={toggleTableVisibility}>
+          {tableVisible ? 'Masquer le tableau' : 'Afficher le tableau'}
+        </button>
+
+        {/* Afficher le contenu seulement si le tableau est visible */}
+        {tableVisible && data.length > 0 ? (
           <div>
             <table>
               <thead>
@@ -245,7 +270,7 @@ const App = () => {
               </thead>
               <tbody>{renderTableData()}</tbody>
             </table>
-            
+
             <div className="pagination">
               <button
                 onClick={() => handlePageChange(currentPage - 1)}
@@ -261,32 +286,61 @@ const App = () => {
                 Suivant
               </button>
             </div>
-
-            <h2>Partie Graphique des Stats</h2>
-
-            <div>
-              <label htmlFor="yearSelector">Choisir une année :</label>
-              <select
-                id="yearSelector"
-                onChange={(e) => setSelectedYear(e.target.value)}
-                value={selectedYear}
-              >
-                <option value="2022">2022</option>
-                <option value="2021">2021</option>
-                <option value="2020">2020</option>
-                <option value="2019">2019</option>
-                <option value="2018">2018</option>
-              </select>
-            </div>
-
-            <PopulationChart labels={populationStats.labels} data={populationStats.data} />
-            <UnemploymentChart labels={unemploymentStats.labels} data={unemploymentStats.data} />
-            <ConstructionChart labels={constructionStats.labels} data={constructionStats.data} />
-
-
           </div>
         ) : (
-          <p>No data available</p>
+          <p></p>
+        )}
+
+        <h2>Statistiques:</h2>
+
+        <div>
+          <label htmlFor="yearSelector">Année :</label>
+          <select
+            id="yearSelector"
+            onChange={(e) => setSelectedYear(e.target.value)}
+            value={selectedYear}
+          >
+            <option value="2022">2022</option>
+            <option value="2021">2021</option>
+            <option value="2020">2020</option>
+            <option value="2019">2019</option>
+            <option value="2018">2018</option>
+          </select>
+        </div>
+
+        {/* Content Slider pour les graphiques */}
+        <div>
+          <span
+            onClick={() => changeActiveTab('population')}
+            style={{ cursor: 'pointer', color: activeTab === 'population' ? 'black' : 'gray' }}
+          >
+            Nombre d'habitants / région
+          </span>{' '}
+          |{' '}
+          <span
+            onClick={() => changeActiveTab('unemployment')}
+            style={{ cursor: 'pointer', color: activeTab === 'unemployment' ? 'black' : 'gray'}}
+          >
+            Taux de chômage / région
+          </span>{' '}
+          |{' '}
+          <span
+            onClick={() => changeActiveTab('construction')}
+            style={{ cursor: 'pointer', color: activeTab === 'construction' ? 'black' : 'gray' }}
+          >
+            Moyenne du nombre de construction / région
+          </span>
+        </div>
+
+        {/* Afficher le graphique correspondant à l'onglet actif */}
+        {activeTab === 'population' && (
+          <PopulationChart labels={populationStats.labels} data={populationStats.data} />
+        )}
+        {activeTab === 'unemployment' && (
+          <UnemploymentChart labels={unemploymentStats.labels} data={unemploymentStats.data} />
+        )}
+        {activeTab === 'construction' && (
+          <ConstructionChart labels={constructionStats.labels} data={constructionStats.data} />
         )}
       </div>
     </div>

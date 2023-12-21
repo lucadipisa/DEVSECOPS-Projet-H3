@@ -10,34 +10,37 @@ const ConstructionChart = ({ labels, data }) => {
       // Détruire l'ancien graphique
       Chart.getChart(ctx)?.destroy();
     }
-    new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: labels,
-        datasets: [
-          {
-            label: 'Moyenne du nombre de construction par région',
-            data: data,
-            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-            borderColor: 'rgba(75, 192, 192, 1)',
-            borderWidth: 1,
-          },
-        ],
+new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: labels,
+    datasets: [
+      {
+        label: 'Moyenne du nombre de construction par région',
+        data: data,
+        backgroundColor: 'rgba(110, 51, 144, 0.5)', // Légèrement transparent pour un look moderne
+        borderColor: 'rgba(110, 51, 144, 0.5)',
+        borderWidth: 2,
       },
-      options: {
-        scales: {
-          y: {
-            beginAtZero: true,
-          },
-        },
+    ],
+  },
+  options: {
+    scales: {
+      y: {
+        beginAtZero: true,
       },
-    });
+    },
+    layout: {
+      padding: 10, // Ajoutez un peu de marge
+    },
+  },
+});
   }, [labels, data]);
 
   return (
-    <div>
+    <div className="chart-container">
       <h3>Moyenne du nombre de construction / région</h3>
-      <canvas ref={canvasRefConstruction} width="400" height="200"></canvas>
+      <canvas ref={canvasRefConstruction} width="200" height="200"></canvas>
     </div>
   );
 };

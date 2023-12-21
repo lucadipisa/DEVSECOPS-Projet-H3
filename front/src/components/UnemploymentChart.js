@@ -18,8 +18,8 @@ const UnemploymentChart = ({ labels, data }) => {
           {
             label: 'Taux de chômage par région',
             data: data,
-            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-            borderColor: 'rgba(75, 192, 192, 1)',
+            backgroundColor: 'rgba(110, 51, 144, 0.5)',
+            borderColor: 'rgba(110, 51, 144, 0.5)',
             borderWidth: 1,
           },
         ],
@@ -35,7 +35,7 @@ const UnemploymentChart = ({ labels, data }) => {
   }, [labels, data]);
 
   return (
-    <div>
+    <div className="chart-container">
       <h3>Taux de chômage / région</h3>
       <canvas ref={canvasRefUnemployment} width="400" height="200"></canvas>
     </div>

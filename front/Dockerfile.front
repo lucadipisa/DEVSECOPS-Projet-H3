@@ -1,0 +1,23 @@
+# Utiliser une image Node officielle
+FROM node:14
+
+# Définir le répertoire de travail
+WORKDIR /app
+
+# Copier les fichiers nécessaires
+COPY package.json .
+COPY package-lock.json .
+COPY public public
+COPY src src
+
+# Installer les dépendances
+RUN npm install
+
+# Construire l'application React
+RUN npm run build
+
+# Exposer le port sur lequel l'application React sera servie (par exemple, 3000)
+EXPOSE 3000
+
+# Commande pour démarrer l'application React
+CMD ["npm", "start"]

@@ -1,0 +1,19 @@
+# Utiliser une image Python officielle
+FROM python:3.8-slim
+
+# Définir le répertoire de travail
+WORKDIR /app
+
+# Copier les fichiers nécessaires
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . .
+
+# Installer les dépendances
+
+# Exposer le port sur lequel l'application Flask écoute
+EXPOSE 5000
+
+# Commande pour démarrer l'application Flask
+CMD ["python", "app.py"]
